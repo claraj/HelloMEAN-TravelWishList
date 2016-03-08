@@ -34,9 +34,10 @@ app.controller('placesController', ['$scope', '$http', function($scope, $http) {
     };
     //$scope.places.push(newPlace);
 
-    $http.post('/places/newPlace', {params : newPlace })
+    $http.post('/places/newPlace', newPlace)
       .success(function(data, status, headers, config){
-        console.log("server reports sucess and sent" + data);
+        console.log("server reports success and sent..")
+        console.log(data);
         $scope.loadPlaces(); //reload list of places.
       })
       .error(function(data, status, headers, config){
@@ -44,7 +45,11 @@ app.controller('placesController', ['$scope', '$http', function($scope, $http) {
         console.log('error adding new place ' + newPlace );
       })
 
-  }
+  };
+
+  //params should end up as parameters to the post req (:postid) ??
+//    $http.post('/places/visited', {params : visitedPlace}
+
 
   //$http.get('/allPlaces').success(function(data, status, header, config) {
   //    $scope.places = data;

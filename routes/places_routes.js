@@ -7,8 +7,8 @@ var Place = require('../models/places');
 
 router.post('/newPlace', function(req, res, next){
 
-  console.log('new place');
-  console.log('body : ' + req.body);  //params?
+  console.log('new place creation, req.body is...');
+  console.log(req.body);  //params?
   //console.log(req.params);
 
   var newPlace = new Place(req.body);  //todo validation
@@ -30,6 +30,15 @@ router.post('/newPlace', function(req, res, next){
 
 });
 
+
+/*
+ http://stackoverflow.com/questions/19254029/angularjs-http-post-does-not-send-data
+
+* $http.post('request-url',  message);
+ Another form which also works is:
+
+ $http.post('request-url',  { params: { paramName: value });
+ Make sure that paramName exactly matches the name of the parameter of the function you are calling.*/
 
 router.post('/visited/:placeid', function(req, res, next){
 
