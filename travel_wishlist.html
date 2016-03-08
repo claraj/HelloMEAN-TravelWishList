@@ -4,10 +4,8 @@
   <meta charset="UTF-8">
   <title>Travel Wish List</title>
 
-
 </head>
 <body>
-
 
 <div ng-app="travelApp" ng-controller="placesController" ng-init="loadPlaces()">
   <h2>Add new place</h2>
@@ -21,20 +19,25 @@
 
   <ul>
     <li ng-repeat="place in places | filter:{visited:false}">
-      <span>{{ place.name }} in {{ place.country }} </span>
-      <input type="checkbox" ng-click="visited(place)">
+      <label>{{ place.name }} in {{ place.country }}
+        <input type="checkbox" ng-click="visited(place)">
+      </label>
     </li>
   </ul>
 
 
-  <!--TODO a list of where you've been  -->
+  <!--A list of where you've been.
+   Notice that both lists have the same model
+   but they are filtered on whether you've
+   visited this place or not. -->
 
   <h2>Where you've been</h2>
 
   <ul>
     <li ng-repeat="place in places | filter:{visited:true}">
-      <span>{{ place.name }} in {{ place.country }} </span>
-      <input type="checkbox" ng-click="visited(place)">
+      <label>{{ place.name }} in {{ place.country }}
+        <input type="checkbox" ng-click="visited(place)">
+      </label>
     </li>
   </ul>
 
