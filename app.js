@@ -6,6 +6,12 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
+var places_routes = require('./routes/places_routes');
+
+
+var mongoose = require('mongoose');
+
+var db = mongoose.connect('mongodb://localhost:27017/travel');
 
 var app = express();
 
@@ -22,7 +28,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
-
+app.use('/places', places_routes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

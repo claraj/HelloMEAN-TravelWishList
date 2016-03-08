@@ -1,9 +1,10 @@
 var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
 
 var place = new Schema( {
   name : String,
   country : String,
-  visited : { Type : Boolean , default : false }
+  visited : { type : Boolean , default : false }
 });
 
 

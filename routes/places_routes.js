@@ -1,3 +1,97 @@
-/**
- * Created by admin on 3/8/16.
- */
+var express = require('express');
+var router = express.Router();
+//Routes that the Angular client code will call
+//to get a list of places, add a new place, update a place as visited
+
+var Place = require('../models/places');
+
+router.post('/newPlace', function(req, res, next){
+
+  console.log('new place');
+  console.log('body : ' + req.body);  //params?
+  //console.log(req.params);
+
+  var newPlace = new Place(req.body);  //todo validation
+  newPlace.save(function(err, place){
+    if (err) {
+      console.log("error! " + err);
+      next(err)
+    }
+    console.log('new place: ' + place );
+
+    res.json(place);
+    //you may need to send the newly created Place back.
+    //Maybe the client needs the _id value, or some other data
+    //your server created.
+    //if not, then
+     //res.sendStatus(200);
+    //will also tell the client that it was saved successfully.
+  })
+
+});
+
+
+router.post('/visited/:placeid', function(req, res, next){
+
+  var _id = req.params.placeid;
+  Place.findByIdAndUpdate( _id, { visited : true }, function(err, place){
+    if (err) {
+      return next(err);
+    }
+    if (!place) {
+      res.json(404, 'Place ID not found');
+    }
+    res.json(place)
+  });
+
+});
+
+
+router.get('/allPlaces', function(req, res, next){
+
+  console.log('hello from allPlaces!');
+
+  Place.find().exec(function(err, places){
+    if (err) {
+      return next(err);
+    }
+
+    if (!places) {
+      places = []
+    }
+
+    res.json(places);
+
+  })
+});
+
+
+router.get('/allPlacesToVisit', function(req, res, next){
+  Place.find({visited : false}).exec(function(err, places){
+    if (err) {
+      return next(err);
+    }
+
+    if (!places) {
+      places = []
+    }
+    res.json(places);
+
+  })
+});
+
+router.get('/allPlacesVisited', function(req, res, next){
+  Place.find({visited : true}).exec(function(err, places){
+    if (err) {
+      return next(err);
+    }
+
+    if (!places) {
+      places = []
+    }
+    res.json(places);
+
+  })
+});
+
+module.exports = router;
