@@ -13,7 +13,9 @@ app.controller('placesController', ['$scope', '$http', function($scope, $http) {
 
   $scope.loadPlaces = function() {
     $http.get('/places/allPlaces').success(function(data, status, header, config) {
-        $scope.places = data;
+      //Set the data that the server returned to the client's model.
+      //because of data binding, the update will be visible in the HTML page.
+      $scope.places = data;
       }
     ).error(function(data, status, header, config){
       console.log('Error fetching all places ' + data);
@@ -47,7 +49,7 @@ app.controller('placesController', ['$scope', '$http', function($scope, $http) {
     console.log(placeVisited);
 
     $http.post('/places/visited/', {placeid : placeVisited._id})
-      .success(function(data, s, h, c){
+      .success(function(data, s, h, c){   //blah typing parameters...
         console.log("server reports success updating" + data);
         $scope.loadPlaces();
       })
