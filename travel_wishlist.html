@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
+  <title>Travel Wish List</title>
 
 
 </head>
@@ -17,20 +17,27 @@
     <input type="submit" value="Add Place" ng-click="addNewPlace(name, country)">
   </form>
 
-  <h2>Your travel list</h2>
+  <h2>Your travel wish list</h2>
 
   <ul>
-
-    <li ng-repeat="place in places">
-
+    <li ng-repeat="place in places | filter:{visited:false}">
       <span>{{ place.name }} in {{ place.country }} </span>
       <input type="checkbox" ng-click="visited(place)">
-
     </li>
-
   </ul>
 
+
   <!--TODO a list of where you've been  -->
+
+  <h2>Where you've been</h2>
+
+  <ul>
+    <li ng-repeat="place in places | filter:{visited:true}">
+      <span>{{ place.name }} in {{ place.country }} </span>
+      <input type="checkbox" ng-click="visited(place)">
+    </li>
+  </ul>
+
 
 </div>
 

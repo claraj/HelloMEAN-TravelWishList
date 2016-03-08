@@ -1,18 +1,15 @@
+/* this controller will...
 
-/* this should....
-
-Fetch and persist (store) changes the model via the places storage service
-provides model for the template to display
-provides event handlers
+- Fetch and save changes to the model - in this case, by HTTP requests to the server
+- Provides model for the template to display
+- Provides event handlers
 
  */
-
 
 var app = angular.module('travelApp'); //get a reference to the app
 
 //And add the controller
 app.controller('placesController', ['$scope', '$http', function($scope, $http) {
-
 
   $scope.loadPlaces = function() {
     $http.get('/places/allPlaces').success(function(data, status, header, config) {
@@ -32,31 +29,31 @@ app.controller('placesController', ['$scope', '$http', function($scope, $http) {
       name: placeName,
       country: newCountry
     };
-    //$scope.places.push(newPlace);
 
     $http.post('/places/newPlace', newPlace)
       .success(function(data, status, headers, config){
-        console.log("server reports success and sent..")
+        console.log("server reports success and sent...")
         console.log(data);
         $scope.loadPlaces(); //reload list of places.
       })
       .error(function(data, status, headers, config){
-        console.log(data + " " + status);
         console.log('error adding new place ' + newPlace );
       })
-
   };
 
-  //params should end up as parameters to the post req (:postid) ??
-//    $http.post('/places/visited', {params : visitedPlace}
+  $scope.visited = function(placeVisited) {
 
+    console.log('visited function');
+    console.log(placeVisited);
 
-  //$http.get('/allPlaces').success(function(data, status, header, config) {
-  //    $scope.places = data;
-  //  }
-  //).error(function(data, status, header, config){
-  //  console.log('Error fetching all places ' + data);
-  //  $scope.place = [];
-  //});
+    $http.post('/places/visited/', {placeid : placeVisited._id})
+      .success(function(data, s, h, c){
+        console.log("server reports success updating" + data);
+        $scope.loadPlaces();
+      })
+      .error(function(d, s, h, c) {
+        console.log('error updating ' + placeVisited + d );
+    })
+  };
 
 }]);

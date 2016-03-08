@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+
 //Routes that the Angular client code will call
 //to get a list of places, add a new place, update a place as visited
 
@@ -8,64 +9,63 @@ var Place = require('../models/places');
 router.post('/newPlace', function(req, res, next){
 
   console.log('new place creation, req.body is...');
-  console.log(req.body);  //params?
-  //console.log(req.params);
+  console.log(req.body);
 
   var newPlace = new Place(req.body);  //todo validation
   newPlace.save(function(err, place){
     if (err) {
       console.log("error! " + err);
-      next(err)
+      return next(err)
     }
     console.log('new place: ' + place );
 
     res.json(place);
+
     //you may need to send the newly created Place back.
     //Maybe the client needs the _id value, or some other data
     //your server created.
     //if not, then
-     //res.sendStatus(200);
+    //res.sendStatus(200);
     //will also tell the client that it was saved successfully.
   })
 
 });
 
 
-/*
- http://stackoverflow.com/questions/19254029/angularjs-http-post-does-not-send-data
+router.post('/visited', function(req, res, next){
 
-* $http.post('request-url',  message);
- Another form which also works is:
-
- $http.post('request-url',  { params: { paramName: value });
- Make sure that paramName exactly matches the name of the parameter of the function you are calling.*/
-
-router.post('/visited/:placeid', function(req, res, next){
-
-  var _id = req.params.placeid;
-  Place.findByIdAndUpdate( _id, { visited : true }, function(err, place){
+  Place.findByIdAndUpdate( req.body.placeid, { visited : true }, function(err, place){
     if (err) {
+      console.log(err);
+      console.log('can\'t set headers after they are sent... why?');
       return next(err);
     }
-    if (!place) {
-      res.json(404, 'Place ID not found');
-    }
-    res.json(place)
-  });
 
+    //If a place with this _id is not found, findByIdAndUpdate will return null
+    else if (place == null) {
+      console.log('this place was not found' );
+
+      //return res.status.... because this is an async method call.
+      //If the return is omitted, this method will keep processing
+      //and run the res.json(place) line, which will fail because
+      //you can't return two things from one request.
+      return res.status(404).json({msg : 'Place ID not found'});
+    }
+
+    res.json(place);   //return the updated place
+
+  });
 });
 
 
 router.get('/allPlaces', function(req, res, next){
-
-  console.log('hello from allPlaces!');
 
   Place.find().exec(function(err, places){
     if (err) {
       return next(err);
     }
 
-    if (!places) {
+    else if (places == null) {
       places = []
     }
 
@@ -74,33 +74,5 @@ router.get('/allPlaces', function(req, res, next){
   })
 });
 
-
-router.get('/allPlacesToVisit', function(req, res, next){
-  Place.find({visited : false}).exec(function(err, places){
-    if (err) {
-      return next(err);
-    }
-
-    if (!places) {
-      places = []
-    }
-    res.json(places);
-
-  })
-});
-
-router.get('/allPlacesVisited', function(req, res, next){
-  Place.find({visited : true}).exec(function(err, places){
-    if (err) {
-      return next(err);
-    }
-
-    if (!places) {
-      places = []
-    }
-    res.json(places);
-
-  })
-});
 
 module.exports = router;
