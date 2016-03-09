@@ -8,7 +8,7 @@
 
 var app = angular.module('travelApp'); //get a reference to the app
 
-//And add the controller
+//And add the controller; add event handlers
 app.controller('placesController', ['$scope', '$http', function($scope, $http) {
 
   $scope.loadPlaces = function() {
@@ -23,8 +23,7 @@ app.controller('placesController', ['$scope', '$http', function($scope, $http) {
     });
   };
 
-  $scope.places = $scope.loadPlaces();
-
+  $scope.places = $scope.loadPlaces();   //define the loadPlace() function first
 
   $scope.addNewPlace = function (placeName, newCountry) {
     var newPlace = {
@@ -34,8 +33,6 @@ app.controller('placesController', ['$scope', '$http', function($scope, $http) {
 
     $http.post('/places/newPlace', newPlace)
       .success(function(data, status, headers, config){
-        console.log("server reports success and sent...")
-        console.log(data);
         $scope.loadPlaces(); //reload list of places.
       })
       .error(function(data, status, headers, config){
@@ -50,7 +47,6 @@ app.controller('placesController', ['$scope', '$http', function($scope, $http) {
 
     $http.post('/places/visited/', {placeid : placeVisited._id})
       .success(function(data, s, h, c){   //blah typing parameters...
-        console.log("server reports success updating" + data);
         $scope.loadPlaces();
       })
       .error(function(d, s, h, c) {
@@ -59,3 +55,4 @@ app.controller('placesController', ['$scope', '$http', function($scope, $http) {
   };
 
 }]);
+

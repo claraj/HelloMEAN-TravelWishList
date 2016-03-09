@@ -36,11 +36,8 @@ router.post('/visited', function(req, res, next){
 
   Place.findByIdAndUpdate( req.body.placeid, { visited : true }, function(err, place){
     if (err) {
-      console.log(err);
-      console.log('can\'t set headers after they are sent... why?');
       return next(err);
     }
-
     //If a place with this _id is not found, findByIdAndUpdate will return null
     else if (place == null) {
       console.log('this place was not found' );
@@ -51,7 +48,6 @@ router.post('/visited', function(req, res, next){
       //you can't return two things from one request.
       return res.status(404).json({msg : 'Place ID not found'});
     }
-
     res.json(place);   //return the updated place
 
   });
@@ -64,11 +60,9 @@ router.get('/allPlaces', function(req, res, next){
     if (err) {
       return next(err);
     }
-
     else if (places == null) {
       places = []
     }
-
     res.json(places);
 
   })
@@ -76,3 +70,5 @@ router.get('/allPlaces', function(req, res, next){
 
 
 module.exports = router;
+
+

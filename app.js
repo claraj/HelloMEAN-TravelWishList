@@ -8,9 +8,7 @@ var bodyParser = require('body-parser');
 var routes = require('./routes/index');
 var places_routes = require('./routes/places_routes');
 
-
 var mongoose = require('mongoose');
-
 var db = mongoose.connect('mongodb://localhost:27017/travel');
 
 var app = express();
